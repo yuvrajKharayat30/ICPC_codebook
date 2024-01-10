@@ -10,19 +10,12 @@ using namespace std;
 // recursive segtree with point update and range query
 template<class T> struct segtree{
     ll n;
-    T def;
+    T def = 0;
     vector<T> t;
     T comb(T a, T b){
         return a+b;
     }
-    void set_def(){
-        def = 0;
-    }
-    segtree(ll n){
-        set_def();
-        this->n =  n;
-        t.resize(4*n);
-    }
+    segtree(ll _n) : n(_n), t(4*_n, def){}
 
     T query(ll k, ll tl, ll tr, ll l, ll r){
         if(l>r)     return def;
@@ -30,7 +23,7 @@ template<class T> struct segtree{
         ll tm = (tl + tr) / 2;
         return comb(query(2*k, tl, tm, l, min(r, tm)), query(2*k+1, tm+1, tr, max(l, tm+1), r));
     }
-    T q(ll l, ll r)    return query(1, 0, n-1, l, r);
+    T q(ll l, ll r)    { return query(1, 0, n-1, l, r); }
 
     void update(ll k, ll tl, ll tr, ll pos, ll newVal){
         if(tl==tr)    t[k] = newVal;
@@ -41,7 +34,7 @@ template<class T> struct segtree{
             t[k] = comb(t[2*k], t[2*k+1]);
         }
     }
-    void u(ll pos, ll val)    update(1, 0, n-1, pos, val);
+    void u(ll pos, ll val)    { update(1, 0, n-1, pos, val); }
 };
 
 signed main(){
